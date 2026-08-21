@@ -4,3 +4,7 @@ packages:
   - 'domain'
   - 'packages/features/*'
   - 'packages/config/*'
+allowBuilds:
+  '@swc/core': true
+  nx: true
+  unrs-resolver: true
