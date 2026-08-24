@@ -1,4 +1,4 @@
-import { Client, IMessage } from '@stomp/stompjs';
+import { Client, IFrame, IMessage } from '@stomp/stompjs';
 
 class WsConnection {
   private client: Client | null = null;
@@ -25,7 +25,7 @@ class WsConnection {
       heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log(`[WsConnection] Connected via STOMP`);
-        
+
         // Subscribe to private events as mapped in the backend
         this.client?.subscribe('/user/queue/events', (message: IMessage) => {
           if (message.body) {
@@ -33,7 +33,7 @@ class WsConnection {
           }
         });
       },
-      onStompError: (frame: import('@stomp/stompjs').IFrame) => {
+      onStompError: (frame:IFrame) => {
         console.error('[WsConnection] STOMP error:', frame.headers['message'], frame.body);
       },
       onWebSocketClose: () => {

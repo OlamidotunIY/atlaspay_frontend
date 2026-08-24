@@ -1,14 +1,9 @@
-import axios from 'axios';
+import { ApiClient } from '../api-client/api-client.js';
 
-export async function requestWsTicket(apiBaseUrl: string, accessToken: string): Promise<string> {
-    const response = await axios.post<{ status: boolean | string; data: { ticket: string } }>(
-        `${apiBaseUrl.replace(/\/$/, '')}/api/v1/ws/ticket`,
-        {},
-        {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        }
+export async function requestWsTicket(apiClient: ApiClient): Promise<string> {
+    const response = await apiClient.post<{ status: boolean | string; data: { ticket: string } }>(
+        '/ws/ticket',
+        {}
     );
     
     if (!response.data.data?.ticket) {
@@ -21,10 +16,5 @@ export async function requestWsTicket(apiBaseUrl: string, accessToken: string): 
 export function buildAuthenticatedWsUrl(wsBaseUrl: string, ticket: string): string {
     const url = new URL(`${wsBaseUrl.replace(/\/$/, '')}/ws-events`);
     url.searchParams.set('ticket', ticket);
-    
-    // Convert http/https to ws/wss if necessary, or just rely on STOMP client handling it
-    const protocol = url.protocol === 'https:' ? 'wss:' : url.protocol === 'http:' ? 'ws:' : url.protocol;
-    url.protocol = protocol;
-    
     return url.toString();
 }
