@@ -1,1 +1,1 @@
-export * from './lib/validation.js';
+export * from './auth/index.js';

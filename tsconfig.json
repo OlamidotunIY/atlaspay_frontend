@@ -4,39 +4,6 @@
   "files": [],
   "references": [
     {
-      "path": "./apps/merchant-web"
-    },
-    {
-      "path": "./apps/merchant-mobile"
-    },
-    {
-      "path": "./packages/data"
-    },
-    {
-      "path": "./packages/auth"
-    },
-    {
-      "path": "./packages/validation"
-    },
-    {
-      "path": "./packages/features/merchants"
-    },
-    {
-      "path": "./packages/features/accounts"
-    },
-    {
-      "path": "./packages/config/eslint"
-    },
-    {
-      "path": "./packages/config/prettier"
-    },
-    {
-      "path": "./packages/config/prettier"
-    },
-    {
-      "path": "./packages/config/typescript"
-    },
-    {
       "path": "./packages/shared"
     },
     {
