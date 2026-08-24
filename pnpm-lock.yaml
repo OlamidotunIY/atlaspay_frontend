@@ -72,9 +72,15 @@ importers:
       '@nx/web':
         specifier: 23.1.1
         version: 23.1.1(b178669b7e1d34b6bd43b1d157ecefb0)
+      '@org/eslint':
+        specifier: workspace:*
+        version: link:packages/config/eslint
       '@org/prettier':
         specifier: workspace:*
         version: link:packages/config/prettier
+      '@org/typescript':
+        specifier: workspace:*
+        version: link:packages/config/typescript
       '@swc-node/register':
         specifier: 1.11.1
         version: 1.11.1(@swc/core@1.15.8(@swc/helpers@0.5.18))(@swc/types@0.1.28)(supports-color@7.2.0)(typescript@6.0.3)
