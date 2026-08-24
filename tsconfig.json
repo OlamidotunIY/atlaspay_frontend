@@ -8,6 +8,15 @@
     },
     {
       "path": "./packages/features/authentication"
+    },
+    {
+      "path": "./packages/design-system"
+    },
+    {
+      "path": "./apps/admin-web-e2e"
+    },
+    {
+      "path": "./apps/admin-web"
     }
   ],
   "compilerOptions": {}
