@@ -1,42 +1,32 @@
 import { StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom/client';
-import App from './app/app';
 
-import { createApiClient, setGlobalApiClient } from '@org/data';
-import { useAuthStore } from '@org/feature-auth'; // Adjust import based on library setup
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { setGlobalRouter } from '@org/shared';
+import { setAuthStorageAdapter } from '@org/authentication';
+import { setGlobalApiClient, createApiClient } from '@org/data';
 
-// Initialize Global API Client
-const apiClient = createApiClient({
-  getToken: () => useAuthStore.getState().accessToken || '',
-  onTokenRefresh: async () => {
-    // Basic refresh setup (use-session-manager handles proactive refresh, this is for 401 fallbacks)
-    return ''; 
-  }
+import { router } from './router/index.js';
+import { cookieStorageAdapter } from './lib/adapters/cookie-storage.adapter.js';
+import App from './app/app.js';
+
+// 1. Dependency Injection: Router
+setGlobalRouter({
+  push: (path) => router.navigate(path),
+  replace: (path) => router.navigate(path, { replace: true }),
+  goBack: () => router.navigate(-1),
 });
-setGlobalApiClient(apiClient);
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+// 2. Dependency Injection: Token Storage
+setAuthStorageAdapter(cookieStorageAdapter);
+
+// 3. Dependency Injection: API Client
+setGlobalApiClient(createApiClient());
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement,
+  document.getElementById('root') as HTMLElement
 );
-
 root.render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </QueryClientProvider>
-  </StrictMode>,
+    <App />
+  </StrictMode>
 );
-
