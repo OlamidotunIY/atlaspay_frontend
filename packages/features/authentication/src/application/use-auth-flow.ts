@@ -18,7 +18,7 @@ type AuthFlowStep =
   | 'loading' 
   | 'requires_2fa' 
   | 'requires_password_change' 
-  | 'requires_password_setup' // Handled by email invites typically
+  | 'requires_password_setup'
   | 'requires_verification' 
   | 'success' 
   | 'error';
@@ -34,9 +34,9 @@ export function useAuthFlow() {
   const { mutateAsync: setupPassword } = useSetupPassword();
   const { mutateAsync: verifyEmail } = useVerifyEmail();
   const { mutateAsync: resendToken } = useResendSetupToken();
-  const { setToken } = useAuthStore();
+  const { setTokens } = useAuthStore();
 
-  const handleAuthResult = (response: { type: string; preAuthToken?: string; identifier?: string; tokens?: { accessToken: string; accessExpiresAt: string } }) => {
+  const handleAuthResult = (response: { type: string; preAuthToken?: string; identifier?: string; tokens?: { accessToken: string; refreshToken?: string; accessExpiresAt: string } }) => {
     if (response.type === 'requires_2fa') {
       setAuthData(prev => ({ ...prev, preAuthToken: response.preAuthToken }));
       setStep('requires_2fa');
@@ -44,7 +44,7 @@ export function useAuthFlow() {
       setAuthData(prev => ({ ...prev, identifier: response.identifier }));
       setStep('requires_password_change');
     } else if (response.type === 'success' && response.tokens) {
-      setToken(response.tokens.accessToken, response.tokens.accessExpiresAt);
+      setTokens(response.tokens.accessToken, response.tokens.refreshToken || '', response.tokens.accessExpiresAt);
       setStep('success');
     }
   };
@@ -73,7 +73,7 @@ export function useAuthFlow() {
      setError(null);
      try {
        const tokens = await verifyMfa({ preAuthToken: authData.preAuthToken, code });
-       setToken(tokens.accessToken, tokens.accessExpiresAt);
+       setTokens(tokens.accessToken, tokens.refreshToken || '', tokens.accessExpiresAt);
        setStep('success');
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
@@ -110,7 +110,6 @@ export function useAuthFlow() {
      setError(null);
      try {
        await verifyEmail(payload);
-       // Usually verification succeeds and returns empty, redirect to login
        setStep('idle');
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
@@ -127,7 +126,6 @@ export function useAuthFlow() {
      }
   };
 
-  // Entry point for an invite link that drops the user into the app with a token
   const initializeSetupFlow = (setupToken: string) => {
       setAuthData({ setupToken });
       setStep('requires_password_setup');
