@@ -1,6 +1,10 @@
 @import "tailwindcss";
 @plugin "tailwindcss-animate";
 
+/* Scan entire monorepo for Tailwind classes */
+@source "../../../../../apps";
+@source "../../../../../packages";
+
 @theme {
   --color-border: var(--border);
   --color-input: var(--input);
