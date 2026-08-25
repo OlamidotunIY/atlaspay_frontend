@@ -12,7 +12,7 @@ const ACTIVITY_THROTTLE_MS = 60 * 1000; // Record activity at most once per minu
 export function useSessionManager() {
   const { mutateAsync: refreshToken } = useRefreshToken();
   const { mutate: logout } = useLogout();
-  const { setToken, isAuthenticated, expiresAt, clear } = useAuthStore();
+  const { setTokens, isAuthenticated, expiresAt, clear, jti } = useAuthStore();
   
   const [showWarning, setShowWarning] = useState(false);
   const lastActivityAt = useRef(Date.now());
@@ -49,7 +49,9 @@ export function useSessionManager() {
        if (timeToExpiry <= 0) {
          // Expired
          clear();
-         logout(''); // Send logout API call if needed
+         if (jti) {
+           logout(jti); 
+         }
          return;
        }
 
@@ -59,9 +61,10 @@ export function useSessionManager() {
          
          // If they were active recently, just silent refresh
          if (timeSinceActivity < WARNING_TIME_MS) {
+           // We pass empty string, assuming Interceptors handle attaching the real refresh token from storage
            refreshToken('')
              .then(res => {
-                 setToken(res.accessToken, res.accessExpiresAt);
+                 setTokens(res.accessToken, res.refreshToken || '', res.accessExpiresAt);
              })
              .catch(() => clear());
          } else {
@@ -84,7 +87,7 @@ export function useSessionManager() {
     return () => {
        if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [isAuthenticated, expiresAt, refreshToken, setToken, clear, logout]);
+  }, [isAuthenticated, expiresAt, refreshToken, setTokens, clear, logout, jti]);
 
   // WebSocket Event Bus Listeners
   useEffect(() => {
@@ -102,17 +105,19 @@ export function useSessionManager() {
     lastActivityAt.current = Date.now();
     try {
       const res = await refreshToken('');
-      setToken(res.accessToken, res.accessExpiresAt);
+      setTokens(res.accessToken, res.refreshToken || '', res.accessExpiresAt);
     } catch {
       clear();
     }
-  }, [refreshToken, setToken, clear]);
+  }, [refreshToken, setTokens, clear]);
 
   const endSession = useCallback(() => {
     setShowWarning(false);
     clear();
-    logout('');
-  }, [clear, logout]);
+    if (jti) {
+       logout(jti);
+    }
+  }, [clear, logout, jti]);
 
   return { showWarning, extendSession, endSession };
 }
