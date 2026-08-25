@@ -8,3 +8,7 @@ export * from './web/components/ui/form.js';
 export * from './web/components/ui/label.js';
 export * from './web/components/ui/card.js';
 export * from './web/components/ui/dialog.js';
+
+// Layouts
+export * from './web/components/layouts/auth-split-layout.js';
+export * from './web/components/layouts/dashboard-layout-shell.js';
