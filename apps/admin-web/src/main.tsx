@@ -1,9 +1,12 @@
-import { StrictMode } from 'react';
+﻿import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 
 import { setGlobalRouter } from '@org/shared';
 import { setAuthStorageAdapter } from '@org/authentication';
 import { setGlobalApiClient, createApiClient } from '@org/data';
+
+// Import Tailwind globals
+import '@org/design-system/styles/globals.css';
 
 import { router } from './router/index.js';
 import { cookieStorageAdapter } from './lib/adapters/cookie-storage.adapter.js';
@@ -30,3 +33,4 @@ root.render(
     <App />
   </StrictMode>
 );
+
