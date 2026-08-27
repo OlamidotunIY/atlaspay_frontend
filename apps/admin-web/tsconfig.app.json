@@ -32,6 +32,9 @@
   "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
   "references": [
     {
+      "path": "../../packages/validation/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/design-system/tsconfig.lib.json"
     },
     {

@@ -6,6 +6,7 @@
     "@org/data": "workspace:*",
     "@org/authentication": "workspace:*",
     "@org/shared": "workspace:*",
-    "@org/design-system": "workspace:*"
+    "@org/design-system": "workspace:*",
+    "@org/validation": "workspace:*"
   }
 }

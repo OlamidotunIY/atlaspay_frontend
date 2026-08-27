@@ -1,31 +1,33 @@
-import
-{
-  Button,
-  Input,
-  FieldGroup,
-  Field,
-  FieldLabel,
-  FieldDescription,
-  AuthFormHeader
-} from '@org/design-system';
+﻿import
+  {
+    Button,
+    Input,
+    FieldGroup,
+    Field,
+    FieldLabel,
+    FieldDescription,
+    AuthFormHeader
+  } from '@org/design-system';
 import { useForm } from '@tanstack/react-form';
-import { LoginSchema } from '@org/validation';
+import { SignupSchema } from '@org/validation';
+import { Link } from 'react-router-dom';
+import { ADMIN_ROUTES } from '@org/shared';
 
-export function LoginPage()
+export function SignupPage()
 {
   const form = useForm({
     defaultValues: {
-      identifier: '',
+      name: '',
+      email: '',
       password: '',
     },
     validators: {
-      onChange: LoginSchema,
+      onChange: SignupSchema,
     },
     onSubmit: async ({ value }) =>
     {
-      // TODO: Wire up to your use-auth-store / mutations
-      console.log('Login submitted:', value);
-      
+      // TODO: Wire up signup mutation
+      console.log('Signup submitted:', value);
     },
   });
 
@@ -41,19 +43,42 @@ export function LoginPage()
     >
       <FieldGroup>
         <AuthFormHeader
-          title="Login to your account"
-          subtitle="Enter your email below to login to your account"
+          title="Create an account"
+          subtitle="Enter your details below to get started"
         />
 
         <form.Field
-          name="identifier"
+          name="name"
           children={(field) => (
             <Field>
-              <FieldLabel htmlFor={field.name}>Email or Employee Code</FieldLabel>
+              <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
               <Input
                 id={field.name}
                 name={field.name}
                 type="text"
+                placeholder="John Doe"
+                value={field.state.value}
+                onChange={(e) => field.handleChange(e.target.value)}
+                onBlur={field.handleBlur}
+              />
+              {field.state.meta.errors ? (
+                <p className="text-[0.8rem] font-medium text-destructive">
+                  {field.state.meta.errors.join(', ')}
+                </p>
+              ) : null}
+            </Field>
+          )}
+        />
+
+        <form.Field
+          name="email"
+          children={(field) => (
+            <Field>
+              <FieldLabel htmlFor={field.name}>Email</FieldLabel>
+              <Input
+                id={field.name}
+                name={field.name}
+                type="email"
                 placeholder="m@example.com"
                 value={field.state.value}
                 onChange={(e) => field.handleChange(e.target.value)}
@@ -72,15 +97,7 @@ export function LoginPage()
           name="password"
           children={(field) => (
             <Field>
-              <div className="flex items-center">
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                <a
-                  href="#"
-                  className="ml-auto text-sm underline-offset-4 hover:underline"
-                >
-                  Forgot your password?
-                </a>
-              </div>
+              <FieldLabel htmlFor={field.name}>Password</FieldLabel>
               <Input
                 id={field.name}
                 name={field.name}
@@ -103,18 +120,18 @@ export function LoginPage()
           children={([canSubmit, isSubmitting]) => (
             <Field>
               <Button type="submit" disabled={!canSubmit}>
-                {isSubmitting ? 'Logging in...' : 'Login'}
+                {isSubmitting ? 'Creating account...' : 'Create account'}
               </Button>
             </Field>
           )}
         />
 
         <Field>
-          <FieldDescription className="text-center">
-            Don't have an account?{" "}
-            <a href="/admin/signup" className="underline underline-offset-4 hover:text-primary">
-              Sign up
-            </a>
+          <FieldDescription className="text-center mt-2">
+            Already have an account?{" "}
+            <Link to={ADMIN_ROUTES.LOGIN} className="underline underline-offset-4 hover:text-primary">
+              Log in
+            </Link>
           </FieldDescription>
         </Field>
       </FieldGroup>
