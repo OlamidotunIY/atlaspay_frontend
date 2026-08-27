@@ -2,7 +2,13 @@
   "name": "@org/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev:all": "nx run-many -t serve",
+    "build:all": "nx run-many -t build",
+    "admin": "nx serve admin-web",
+    "web": "nx serve merchant-web",
+    "mobile": "nx start merchant-mobile"
+  },
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.14.5",
@@ -67,13 +73,16 @@
     "@expo/metro": "~56.0.0",
     "@expo/metro-runtime": "~56.0.14",
     "@expo/vector-icons": "~15.1.0",
+    "@tanstack/react-form": "^1.33.5",
     "@tanstack/react-query": "^5.101.4",
+    "@tanstack/zod-form-adapter": "^0.42.1",
     "expo": "~56.0.0",
     "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
     "expo-system-ui": "~56.0.5",
     "js-cookie": "^3.0.8",
     "jwt-decode": "^4.0.0",
+    "lucide-react": "^1.33.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-native": "0.85.3",
@@ -81,6 +90,7 @@
     "react-native-svg-transformer": "~1.5.1",
     "react-native-web": "~0.21.0",
     "react-router-dom": "6.30.3",
+    "shadcn": "^4.19.0",
     "zustand": "^5.0.15"
   },
   "prettier": "@org/prettier"
