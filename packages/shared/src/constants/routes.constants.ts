@@ -7,6 +7,7 @@ export const MERCHANT_ROUTES = {
 
 export const ADMIN_ROUTES = {
     LOGIN: '/admin/login',
+    SIGNUP: '/admin/signup',
     DASHBOARD: '/admin/dashboard',
     SETTINGS: '/admin/settings',
 }
