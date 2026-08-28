@@ -3,7 +3,8 @@ import { ApiResponse } from '@org/shared';
 import {
   LoginRequestDto, ChangeTemporaryPasswordRequestDto, SetupPasswordRequestDto,
   ResendSetupTokenRequestDto, CompleteVerificationRequestDto, VerifyMfaRequestDto,
-  RefreshTokenRequestDto, LogoutRequestDto, AuthResponseDto, AuthTokenDto, AuthAccountDto
+  RefreshTokenRequestDto, LogoutRequestDto, AuthResponseDto, AuthTokenDto, AuthAccountDto,
+  VerificationResponseDto
 } from './auth.dto.js';
 
 const getApi = () => getGlobalApiClient();
@@ -21,8 +22,8 @@ export const authApi = {
   resendSetupToken: (req: ResendSetupTokenRequestDto): Promise<void> =>
     getApi().post<ApiResponse<void>>('/auth/setup-password/resend', req).then(() => undefined),
 
-  verifyEmail: (req: CompleteVerificationRequestDto): Promise<void> =>
-    getApi().post<ApiResponse<void>>('/auth/verify-email', req).then(() => undefined),
+  verifyEmail: (req: CompleteVerificationRequestDto): Promise<VerificationResponseDto> =>
+    getApi().post<ApiResponse<VerificationResponseDto>>('/auth/verify-email', req).then(r => r.data.data),
 
   verifyMfa: (req: VerifyMfaRequestDto): Promise<AuthTokenDto> =>
     getApi().post<ApiResponse<AuthTokenDto>>('/auth/mfa/verify', req).then(r => r.data.data),

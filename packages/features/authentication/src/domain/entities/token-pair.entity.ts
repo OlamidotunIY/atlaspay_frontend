@@ -1,5 +1,5 @@
 export interface TokenPairProps {
-  accessToken: string;
+  accessToken: string ;
   refreshToken: string;
   accessExpiresAt: string;
   refreshExpiresAt: string;

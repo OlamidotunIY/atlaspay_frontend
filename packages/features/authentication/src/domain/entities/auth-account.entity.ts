@@ -1,28 +1,28 @@
-import { PrincipalType } from '../value-objects/principal-type.vo.js';
 import { AuthStatus } from '../value-objects/auth-status.enum.js';
-import { Role } from '../value-objects/role.enum.js';
 
 export interface AuthAccountProps {
-  id: string;
-  email: string;
-  principalType: string;
-  status: string;
-  roles: string[];
-  twoFactorEnabled: boolean;
-  createdAt: string;
-  employeeCode?: string;
+  userId?: number;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  country?: string;
+  totpEnabled?: boolean;
+  status?: string;
+  scope?: string;
 }
 
 export class AuthAccount {
   constructor(
-    public readonly id: string,
+    public readonly id: string, // string mapped from userId
     public readonly email: string,
-    public readonly principalType: PrincipalType,
     public readonly status: AuthStatus,
-    public readonly roles: Role[],
+    public readonly scope: string,
     public readonly twoFactorEnabled: boolean,
-    public readonly createdAt: string,
-    public readonly employeeCode?: string // Used for ADMIN principals
+    public readonly firstName?: string,
+    public readonly lastName?: string,
+    public readonly phone?: string,
+    public readonly country?: string
   ) {}
 
   /**
@@ -37,16 +37,18 @@ export class AuthAccount {
     return this.status === AuthStatus.UNVERIFIED;
   }
 
-  hasRole(role: Role): boolean {
-    return this.roles.includes(role);
+  hasRole(roleName: string): boolean {
+    return this.scope.includes(roleName);
   }
 
   isMerchant(): boolean {
-    return this.principalType === 'MERCHANT';
+    // Assuming backend returns something like 'MERCHANT' in the scope or status, or you check a specific role
+    // For now we'll simulate the old principalType check using scope or just returning true for merchant app context.
+    return this.scope.includes('MERCHANT');
   }
 
   isAdmin(): boolean {
-    return this.principalType === 'ADMIN';
+    return this.scope.includes('ADMIN');
   }
 
   /**
@@ -54,14 +56,15 @@ export class AuthAccount {
    */
   static fromJson(data: AuthAccountProps): AuthAccount {
     return new AuthAccount(
-      data.id,
-      data.email,
-      data.principalType as PrincipalType,
-      data.status as AuthStatus,
-      (data.roles || []).map(r => r as Role),
-      data.twoFactorEnabled,
-      data.createdAt,
-      data.employeeCode
+      String(data.userId || ''),
+      data.email || '',
+      (data.status as AuthStatus) || AuthStatus.UNVERIFIED,
+      data.scope || '',
+      data.totpEnabled || false,
+      data.firstName,
+      data.lastName,
+      data.phone,
+      data.country
     );
   }
 }

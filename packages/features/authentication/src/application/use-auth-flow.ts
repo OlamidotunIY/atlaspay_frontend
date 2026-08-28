@@ -10,22 +10,23 @@ import {
   LoginRequestDto, 
   ChangeTemporaryPasswordRequestDto,
   SetupPasswordRequestDto,
-  CompleteVerificationRequestDto
+  CompleteVerificationRequestDto,
+  OnboardingStatus
 } from '../data/adapters/rest-api/auth.dto.js';
+import { AuthStep } from '../domain/value-objects/auth-step.enum.js';
+import { MERCHANT_ROUTES } from '@org/shared';
 
-type AuthFlowStep = 
-  | 'idle' 
-  | 'loading' 
-  | 'requires_2fa' 
-  | 'requires_password_change' 
-  | 'requires_password_setup'
-  | 'requires_verification' 
-  | 'success' 
-  | 'error';
+export const AUTH_STEP_ROUTES: Partial<Record<AuthStep, string>> = {
+  [AuthStep.REQUIRES_2FA]: MERCHANT_ROUTES.TWO_FACTOR_AUTH,
+  [AuthStep.REQUIRES_VERIFICATION]: MERCHANT_ROUTES.VERIFY_EMAIL,
+  [AuthStep.REQUIRES_PASSWORD_SETUP]: MERCHANT_ROUTES.SETUP_PASSWORD,
+  [AuthStep.REQUIRES_ORG_SETUP]: MERCHANT_ROUTES.ONBOARDING_ORGANIZATION,
+  [AuthStep.SUCCESS]: MERCHANT_ROUTES.DASHBOARD,
+};
 
 export function useAuthFlow() {
-  const [step, setStep] = useState<AuthFlowStep>('idle');
-  const [authData, setAuthData] = useState<{ identifier?: string; preAuthToken?: string; setupToken?: string }>({});
+  const [step, setStep] = useState<AuthStep>(AuthStep.IDLE);
+  const [authData, setAuthData] = useState<{ identifier?: string; preAuthToken?: string; setupToken?: string; invitationToken?: string }>({});
   const [error, setError] = useState<Error | null>(null);
   
   const { mutateAsync: login } = useLogin();
@@ -36,84 +37,117 @@ export function useAuthFlow() {
   const { mutateAsync: resendToken } = useResendSetupToken();
   const { setTokens } = useAuthStore();
 
-  const handleAuthResult = (response: { type: string; preAuthToken?: string; identifier?: string; tokens?: { accessToken: string; refreshToken?: string; accessExpiresAt: string } }) => {
+  const handleAuthResult = (response: { type: string; preAuthToken?: string; identifier?: string; tokens?: { accessToken: string; refreshToken?: string; accessExpiresAt: string }; onboardingStatus?: string }): AuthStep => {
+    let nextStep = AuthStep.IDLE;
+    
     if (response.type === 'requires_2fa') {
       setAuthData(prev => ({ ...prev, preAuthToken: response.preAuthToken }));
-      setStep('requires_2fa');
+      nextStep = AuthStep.REQUIRES_2FA;
     } else if (response.type === 'requires_password_change') {
       setAuthData(prev => ({ ...prev, identifier: response.identifier }));
-      setStep('requires_password_change');
+      // Using PASSWORD_SETUP route for both change and setup for now, or you can add a dedicated route.
+      nextStep = AuthStep.REQUIRES_PASSWORD_SETUP;
     } else if (response.type === 'success' && response.tokens) {
       setTokens(response.tokens.accessToken, response.tokens.refreshToken || '', response.tokens.accessExpiresAt);
-      setStep('success');
+      
+      const status = response.onboardingStatus as OnboardingStatus;
+      if (status === 'NO_ORG') {
+        nextStep = AuthStep.REQUIRES_ORG_SETUP;
+      } else {
+        nextStep = AuthStep.SUCCESS;
+      }
     }
+    
+    setStep(nextStep);
+    return nextStep;
   };
 
-  const submitLogin = async (credentials: LoginRequestDto) => {
-    setStep('loading');
+  const getTargetRoute = (currentStep: AuthStep, fallback?: string): string | undefined => {
+    return AUTH_STEP_ROUTES[currentStep] || fallback;
+  };
+
+  const submitLogin = async (credentials: LoginRequestDto, fallbackRoute?: string): Promise<string | undefined> => {
+    setStep(AuthStep.LOADING);
     setError(null);
     try {
       const response = await login(credentials);
-      handleAuthResult(response);
+      const nextStep = handleAuthResult(response);
+      return getTargetRoute(nextStep, fallbackRoute);
     } catch (error: unknown) {
       const err = error as Error & { errorCode?: string };
       if (err.errorCode === 'ACCOUNT_UNVERIFIED' || err.name === 'AccountUnverifiedError') {
-         setAuthData({ identifier: credentials.identifier });
-         setStep('requires_verification');
+         setAuthData(prev => ({ ...prev, identifier: credentials.identifier }));
+         setStep(AuthStep.REQUIRES_VERIFICATION);
+         return getTargetRoute(AuthStep.REQUIRES_VERIFICATION, fallbackRoute);
       } else {
          setError(error instanceof Error ? error : new Error(String(error)));
-         setStep('error');
+         setStep(AuthStep.ERROR);
+         return undefined;
       }
     }
   };
 
-  const submitMfa = async (code: string) => {
+  const submitMfa = async (code: string, fallbackRoute?: string): Promise<string | undefined> => {
      if (!authData.preAuthToken) return;
-     setStep('loading');
+     setStep(AuthStep.LOADING);
      setError(null);
      try {
        const tokens = await verifyMfa({ preAuthToken: authData.preAuthToken, code });
        setTokens(tokens.accessToken, tokens.refreshToken || '', tokens.accessExpiresAt);
-       setStep('success');
+       setStep(AuthStep.SUCCESS);
+       return getTargetRoute(AuthStep.SUCCESS, fallbackRoute);
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
-       setStep('error');
+       setStep(AuthStep.ERROR);
+       return undefined;
      }
   };
 
-  const submitPasswordChange = async (payload: ChangeTemporaryPasswordRequestDto) => {
-     setStep('loading');
+  const submitPasswordChange = async (payload: ChangeTemporaryPasswordRequestDto, fallbackRoute?: string): Promise<string | undefined> => {
+     setStep(AuthStep.LOADING);
      setError(null);
      try {
        const response = await changePassword(payload);
-       handleAuthResult(response);
+       const nextStep = handleAuthResult(response);
+       return getTargetRoute(nextStep, fallbackRoute);
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
-       setStep('error');
+       setStep(AuthStep.ERROR);
+       return undefined;
      }
   };
 
-  const submitPasswordSetup = async (payload: SetupPasswordRequestDto) => {
-     setStep('loading');
+  const submitPasswordSetup = async (payload: SetupPasswordRequestDto, fallbackRoute?: string): Promise<string | undefined> => {
+     setStep(AuthStep.LOADING);
      setError(null);
      try {
        const response = await setupPassword(payload);
-       handleAuthResult(response);
+       const nextStep = handleAuthResult(response);
+       return getTargetRoute(nextStep, fallbackRoute);
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
-       setStep('error');
+       setStep(AuthStep.ERROR);
+       return undefined;
      }
   };
 
-  const submitEmailVerification = async (payload: CompleteVerificationRequestDto) => {
-     setStep('loading');
+  const submitEmailVerification = async (payload: CompleteVerificationRequestDto, fallbackRoute?: string): Promise<string | undefined> => {
+     setStep(AuthStep.LOADING);
      setError(null);
      try {
-       await verifyEmail(payload);
-       setStep('idle');
+       const response = await verifyEmail(payload);
+       if (response.nextAction === 'SETUP_PASSWORD' && response.sessionToken) {
+         setAuthData(prev => ({ ...prev, setupToken: response.sessionToken }));
+         setStep(AuthStep.REQUIRES_PASSWORD_SETUP);
+         return getTargetRoute(AuthStep.REQUIRES_PASSWORD_SETUP, fallbackRoute);
+       } else {
+         setStep(AuthStep.IDLE);
+         return fallbackRoute;
+       }
      } catch (error: unknown) {
        setError(error instanceof Error ? error : new Error(String(error)));
-       setStep('error');
+       setStep(AuthStep.ERROR);
+       return undefined;
      }
   };
 
@@ -127,8 +161,12 @@ export function useAuthFlow() {
   };
 
   const initializeSetupFlow = (setupToken: string) => {
-      setAuthData({ setupToken });
-      setStep('requires_password_setup');
+      setAuthData(prev => ({ ...prev, setupToken }));
+      setStep(AuthStep.REQUIRES_PASSWORD_SETUP);
+  };
+
+  const initializeInvitation = (invitationToken: string) => {
+      setAuthData(prev => ({ ...prev, invitationToken }));
   };
   
   return { 
@@ -137,11 +175,13 @@ export function useAuthFlow() {
     authData, 
     setStep,
     initializeSetupFlow,
+    initializeInvitation,
     submitLogin, 
     submitMfa,
     submitPasswordChange,
     submitPasswordSetup,
     submitEmailVerification,
-    resendSetupEmail
+    resendSetupEmail,
+    getTargetRoute
   };
 }

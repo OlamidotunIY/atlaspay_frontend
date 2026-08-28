@@ -1,8 +1,8 @@
 import { IAuthRepository, AuthResult } from '../../domain/repository/auth.repository.interface.js';
 import { authApi } from '../adapters/rest-api/auth.api.js';
 import { TokenPair } from '../../domain/entities/token-pair.entity.js';
-import { AuthAccount } from '../../domain/entities/auth-account.entity.js';
-import { AuthResponseDto } from '../adapters/rest-api/auth.dto.js';
+import { AuthAccount, AuthAccountProps } from '../../domain/entities/auth-account.entity.js';
+import { AuthResponseDto, VerificationResponseDto, CompleteVerificationRequestDto } from '../adapters/rest-api/auth.dto.js';
 
 export class AuthRepository implements IAuthRepository {
 
@@ -16,7 +16,8 @@ export class AuthRepository implements IAuthRepository {
     if (dto.tokens) {
       return {
         type: 'success',
-        tokens: TokenPair.fromJson(dto.tokens)
+        tokens: TokenPair.fromJson(dto.tokens as any),
+        onboardingStatus: dto.onboardingStatus
       };
     }
     throw new Error('Invalid authentication state returned from server');
@@ -41,18 +42,18 @@ export class AuthRepository implements IAuthRepository {
     await authApi.resendSetupToken({ identifier });
   }
 
-  async verifyEmail(payload: { identifier: string; code: string; type: string }): Promise<void> {
-    await authApi.verifyEmail(payload);
+  async verifyEmail(payload: { identifier: string; code: string; type: string }): Promise<VerificationResponseDto> {
+    return authApi.verifyEmail(payload as CompleteVerificationRequestDto);
   }
 
   async verifyMfa(payload: { preAuthToken: string; code: string }): Promise<TokenPair> {
     const dto = await authApi.verifyMfa(payload);
-    return TokenPair.fromJson(dto);
+    return TokenPair.fromJson(dto as any);
   }
 
   async refreshToken(token: string): Promise<TokenPair> {
     const dto = await authApi.refreshToken({ refreshToken: token });
-    return TokenPair.fromJson(dto);
+    return TokenPair.fromJson(dto as any);
   }
 
   async logout(jti: string): Promise<void> {
@@ -61,7 +62,7 @@ export class AuthRepository implements IAuthRepository {
 
   async getAuthAccount(): Promise<AuthAccount> {
     const dto = await authApi.getAuthAccount();
-    return AuthAccount.fromJson(dto);
+    return AuthAccount.fromJson(dto as AuthAccountProps);
   }
 }
 

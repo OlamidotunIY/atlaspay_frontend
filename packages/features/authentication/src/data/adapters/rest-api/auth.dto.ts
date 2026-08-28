@@ -1,24 +1,23 @@
-import { AuthAccountProps } from "../../../domain/entities/auth-account.entity.js";
-import { TokenPairProps } from "../../../domain/entities/token-pair.entity.js";
+import type { components } from '@org/data';
 
+// ---- Request DTOs ----
+export type LoginRequestDto                    = components['schemas']['LoginRequestDto'];
+export type ChangeTemporaryPasswordRequestDto  = components['schemas']['ChangeTemporaryPasswordRequestDto'];
+export type SetupPasswordRequestDto            = components['schemas']['SetupPasswordRequestDto'];
+export type ResendSetupTokenRequestDto         = components['schemas']['ResendSetupTokenRequestDto'];
+export type CompleteVerificationRequestDto     = components['schemas']['CompleteVerificationRequestDto'];
+export type VerifyMfaRequestDto                = components['schemas']['VerifyMfaRequestDto'];
+export type RefreshTokenRequestDto             = components['schemas']['RefreshTokenRequestDto'];
+export type LogoutRequestDto                   = components['schemas']['LogoutRequestDto'];
 
-export interface LoginRequestDto { identifier: string; password: string; }
-export interface ChangeTemporaryPasswordRequestDto { identifier: string; oldPassword: string; newPassword: string; }
-export interface SetupPasswordRequestDto { setupToken: string; newPassword: string; }
-export interface ResendSetupTokenRequestDto { identifier: string; }
-export interface CompleteVerificationRequestDto { identifier: string; code: string; type: string; }
-export interface VerifyMfaRequestDto { preAuthToken: string; code: string; }
-export interface RefreshTokenRequestDto { refreshToken: string; }
-export interface LogoutRequestDto { jti: string; }
+// ---- Response DTOs ----
+export type AuthResponseDto                    = components['schemas']['AuthResponseDto'];
+export type AuthTokenDto                       = components['schemas']['AuthTokenDto'];
+export type VerificationResponseDto            = components['schemas']['VerificationResponseDto'];
 
-export interface AuthTokenDto extends TokenPairProps {}
+export type AuthAccountDto = components['schemas']['AuthenticatedUserDto'];
 
-export interface AuthResponseDto {
-  requiresTwoFactor: boolean;
-  requiresPasswordChange: boolean;
-  identifier?: string;
-  preAuthToken?: string;
-  tokens?: AuthTokenDto;
-}
-
-export interface AuthAccountDto extends AuthAccountProps {}
+// Ensure strictly typed variants from backend schema
+// The backend hasn't converted these to enums in the spec yet, but we enforce them based on domain knowledge.
+export type OnboardingStatus = 'HAS_ORG' | 'NO_ORG' | 'NO_USER';
+export type VerificationNextAction = 'SETUP_PASSWORD';
