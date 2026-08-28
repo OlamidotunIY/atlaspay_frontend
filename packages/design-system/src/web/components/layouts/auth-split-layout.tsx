@@ -18,7 +18,7 @@ export function AuthSplitLayout({ imageUrl, children }: AuthSplitLayoutProps)
               <div className="flex size-6 items-center justify-center rounded-sm overflow-hidden bg-primary">
                 <img src="/icon.png" alt="Atlaspay Logo" className="w-full h-full object-cover" />
               </div>
-              Atlaspay
+              AtlasHub
             </div>
           </a>
         </div>
