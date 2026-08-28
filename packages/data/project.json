@@ -1,0 +1,23 @@
+{
+  "name": "@org/data",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/data/src",
+  "projectType": "library",
+  "targets": {
+    "generate:api": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec openapi-typescript http://localhost:8080/v3/api-docs -o packages/data/src/generated/schema.d.ts",
+        "cwd": "{workspaceRoot}"
+      },
+      "configurations": {
+        "staging": {
+          "command": "pnpm exec openapi-typescript https://staging-api.atlashub.com/v3/api-docs -o packages/data/src/generated/schema.d.ts"
+        },
+        "production": {
+          "command": "pnpm exec openapi-typescript https://api.atlashub.com/v3/api-docs -o packages/data/src/generated/schema.d.ts"
+        }
+      }
+    }
+  }
+}
