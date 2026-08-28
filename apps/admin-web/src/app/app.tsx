@@ -6,7 +6,7 @@ import '../styles.css';
 
 export function App() {
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient as any}>
       <RouterProvider router={router} />
     </QueryClientProvider>
   );

@@ -5,7 +5,6 @@ import
   FieldGroup,
   Field,
   FieldLabel,
-  FieldDescription,
   AuthFormHeader
 } from '@org/design-system';
 import { useForm } from '@tanstack/react-form';
@@ -61,7 +60,7 @@ export function LoginPage()
               />
               {field.state.meta.errors ? (
                 <p className="text-[0.8rem] font-medium text-destructive">
-                  {field.state.meta.errors.join(', ')}
+                  {field.state.meta.errors.map((err: any) => typeof err === 'string' ? err : err?.message || JSON.stringify(err)).join(', ')}
                 </p>
               ) : null}
             </Field>
@@ -91,7 +90,7 @@ export function LoginPage()
               />
               {field.state.meta.errors ? (
                 <p className="text-[0.8rem] font-medium text-destructive">
-                  {field.state.meta.errors.join(', ')}
+                  {field.state.meta.errors.map((err: any) => typeof err === 'string' ? err : err?.message || JSON.stringify(err)).join(', ')}
                 </p>
               ) : null}
             </Field>
@@ -109,14 +108,7 @@ export function LoginPage()
           )}
         />
 
-        <Field>
-          <FieldDescription className="text-center">
-            Don't have an account?{" "}
-            <a href="/admin/signup" className="underline underline-offset-4 hover:text-primary">
-              Sign up
-            </a>
-          </FieldDescription>
-        </Field>
+
       </FieldGroup>
     </form>
   );
