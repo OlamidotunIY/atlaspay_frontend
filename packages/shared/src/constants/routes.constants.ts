@@ -1,13 +1,16 @@
 export const MERCHANT_ROUTES = {
     LOGIN: '/login',
-    Registration: '/register',
+    REGISTRATION: '/register',
+    TWO_FACTOR_AUTH: '/auth/2fa',
+    VERIFY_EMAIL: '/auth/verify-email',
+    SETUP_PASSWORD: '/auth/setup-password',
+    ONBOARDING_ORGANIZATION: '/onboarding/organization',
     DASHBOARD: '/dashboard',
     SETTINGS: '/settings',
 }
 
 export const ADMIN_ROUTES = {
     LOGIN: '/admin/login',
-    SIGNUP: '/admin/signup',
     DASHBOARD: '/admin/dashboard',
     SETTINGS: '/admin/settings',
 }
