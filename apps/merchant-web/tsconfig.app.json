@@ -29,5 +29,25 @@
     "jest.config.ts",
     "jest.config.cts"
   ],
-  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"],
+  "references": [
+    {
+      "path": "../../packages/validation/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/design-system/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/shared/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/features/authentication/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/data/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/features/user/tsconfig.lib.json"
+    }
+  ]
 }

@@ -1,5 +1,13 @@
 {
   "name": "@org/merchant-web",
   "version": "0.0.1",
-  "private": true
+  "private": true,
+   "dependencies": {
+    "@org/data": "workspace:*",
+    "@org/authentication": "workspace:*",
+    "@org/shared": "workspace:*",
+    "@org/design-system": "workspace:*",
+    "@org/validation": "workspace:*",
+    "@org/user": "workspace:*"
+  }
 }
