@@ -3,6 +3,11 @@ import type { components } from '@org/data';
 export type RegisterOrganizationRequest = components['schemas']['RegisterOrganizationRequest'];
 export type RegisterOrganizationResult = components['schemas']['RegisterOrganizationResult'];
 export type OrganizationProfileDto = components['schemas']['OrganizationProfileDto'];
+export type BusinessType =
+  RegisterOrganizationRequest['businessType'];
+
+export type BusinessSize =
+  RegisterOrganizationRequest['businessSize'];
 
 // Compliance related types
 export type CompleteComplianceProfileRequest = components['schemas']['CompleteComplianceProfileRequest'];
