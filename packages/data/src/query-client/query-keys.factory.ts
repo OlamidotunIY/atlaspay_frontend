@@ -1,5 +1,5 @@
 
-export function createQueryKeyFactory<T extends string>(scope: T) {
+export function createQueryKeyFactory<const T extends string>(scope: T) {
     return {
         all: [scope] as const,
         lists: () => [scope, 'list'] as const,

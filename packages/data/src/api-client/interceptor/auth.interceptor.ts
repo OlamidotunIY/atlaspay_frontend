@@ -22,11 +22,20 @@ export function applyAuthInterceptor(
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retried) {
+      
+      if (
+        error.response?.status === 401 && 
+        !originalRequest._retried && 
+        !originalRequest.url?.includes('/auth/refresh')
+      ) {
         originalRequest._retried = true;
-        const newToken = await options?.onTokenRefresh();
-        originalRequest.headers[AUTH_HEADER] = `${BEARER_PREFIX}${newToken}`;
-        return instance(originalRequest);
+        try {
+          const newToken = await options?.onTokenRefresh();
+          originalRequest.headers[AUTH_HEADER] = `${BEARER_PREFIX}${newToken}`;
+          return instance(originalRequest);
+        } catch (refreshError) {
+          return Promise.reject(refreshError);
+        }
       }
 
       return Promise.reject(error);
