@@ -19,6 +19,7 @@
     "@nx/expo": "23.1.1",
     "@nx/jest": "23.1.1",
     "@nx/js": "23.1.1",
+    "@nx/nx-win32-x64-msvc": "23.1.1",
     "@nx/playwright": "23.1.1",
     "@nx/react": "23.1.1",
     "@nx/vite": "23.1.1",
@@ -27,7 +28,6 @@
     "@org/prettier": "workspace:*",
     "@org/typescript": "workspace:*",
     "@playwright/test": "^1.37.0",
-    "@remix-run/router": "^1.23.4",
     "@swc-node/register": "1.11.1",
     "@swc/cli": "~0.8.1",
     "@swc/core": "1.15.8",
@@ -90,6 +90,7 @@
     "react-native-svg": "15.12.1",
     "react-native-svg-transformer": "~1.5.1",
     "react-native-web": "~0.21.0",
+    "react-router": "^8.3.1",
     "react-router-dom": "6.30.3",
     "shadcn": "^4.19.0",
     "zustand": "^5.0.15"
