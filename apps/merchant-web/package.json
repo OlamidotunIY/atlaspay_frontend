@@ -8,6 +8,7 @@
     "@org/shared": "workspace:*",
     "@org/design-system": "workspace:*",
     "@org/validation": "workspace:*",
-    "@org/user": "workspace:*"
+    "@org/user": "workspace:*",
+    "@org/organization": "workspace:*"
   }
 }
