@@ -6,3 +6,5 @@ export * from './use-setup-password.mutation.js';
 export * from './use-resend-setup-token.mutation.js';
 export * from './use-refresh-token.mutation.js';
 export * from './use-logout.mutation.js';
+export * from './use-accept-invitation.js';
+export * from './use-decline-invitation.js';

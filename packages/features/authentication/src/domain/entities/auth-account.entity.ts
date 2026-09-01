@@ -3,6 +3,7 @@ import { AuthStatus } from '../value-objects/auth-status.enum.js';
 export interface AuthAccountProps {
   userId?: number;
   email?: string;
+  imageUrl?: string;
   firstName?: string;
   lastName?: string;
   phone?: string;
@@ -10,6 +11,7 @@ export interface AuthAccountProps {
   totpEnabled?: boolean;
   status?: string;
   scope?: string;
+  onboardingStatus?: string;
 }
 
 export class AuthAccount {
@@ -19,6 +21,8 @@ export class AuthAccount {
     public readonly status: AuthStatus,
     public readonly scope: string,
     public readonly twoFactorEnabled: boolean,
+    public readonly onboardingStatus: string,
+    public readonly imageUrl?: string,
     public readonly firstName?: string,
     public readonly lastName?: string,
     public readonly phone?: string,
@@ -61,6 +65,8 @@ export class AuthAccount {
       (data.status as AuthStatus) || AuthStatus.UNVERIFIED,
       data.scope || '',
       data.totpEnabled || false,
+      data.onboardingStatus || 'NO_ORG',
+      data.imageUrl,
       data.firstName,
       data.lastName,
       data.phone,

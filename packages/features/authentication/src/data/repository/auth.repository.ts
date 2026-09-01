@@ -2,7 +2,7 @@ import { IAuthRepository, AuthResult } from '../../domain/repository/auth.reposi
 import { authApi } from '../adapters/rest-api/auth.api.js';
 import { TokenPair } from '../../domain/entities/token-pair.entity.js';
 import { AuthAccount, AuthAccountProps } from '../../domain/entities/auth-account.entity.js';
-import { AuthResponseDto, VerificationResponseDto, CompleteVerificationRequestDto } from '../adapters/rest-api/auth.dto.js';
+import { AuthResponseDto, CompleteVerificationRequestDto, VerificationResponseDto } from '../adapters/index.js';
 
 export class AuthRepository implements IAuthRepository {
 

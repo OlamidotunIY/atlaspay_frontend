@@ -5,7 +5,7 @@ import {
   ResendSetupTokenRequestDto, CompleteVerificationRequestDto, VerifyMfaRequestDto,
   RefreshTokenRequestDto, LogoutRequestDto, AuthResponseDto, AuthTokenDto, AuthAccountDto,
   VerificationResponseDto
-} from './auth.dto.js';
+} from '../dtos/index.js';
 
 const getApi = () => getGlobalApiClient();
 
