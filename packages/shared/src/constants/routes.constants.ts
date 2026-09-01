@@ -5,6 +5,9 @@ export const MERCHANT_ROUTES = {
     VERIFY_EMAIL: '/auth/verify-email',
     SETUP_PASSWORD: '/auth/setup-password',
     ONBOARDING_ORGANIZATION: '/onboarding/organization',
+    ONBOARDING_PRODUCTS: '/onboarding/products',
+    ONBOARDING_TEAM: '/onboarding/team',
+    ONBOARDING_COMPLETE: '/onboarding/complete',
     DASHBOARD: '/dashboard',
     SETTINGS: '/settings',
 }
