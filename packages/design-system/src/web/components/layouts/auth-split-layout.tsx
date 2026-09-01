@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Logo } from '../ui';
 
 export interface AuthSplitLayoutProps
 {
@@ -14,12 +15,7 @@ export function AuthSplitLayout({ imageUrl, children }: AuthSplitLayoutProps)
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center gap-2 md:justify-start">
           <a href="#">
-            <div className="flex items-center gap-2 font-medium text-lg">
-              <div className="flex size-6 items-center justify-center rounded-sm overflow-hidden bg-primary">
-                <img src="/icon.png" alt="Atlaspay Logo" className="w-full h-full object-cover" />
-              </div>
-              AtlasHub
-            </div>
+            <Logo />
           </a>
         </div>
         <div className="flex flex-1 items-center justify-center">
@@ -34,7 +30,7 @@ export function AuthSplitLayout({ imageUrl, children }: AuthSplitLayoutProps)
         <img
           src={imageUrl || "/placeholder.svg"}
           alt="Authentication Background"
-          className="absolute inset-0 h-full w-full object-cover "
+          className="absolute inset-0 h-full w-full object-cover"
         />
       </div>
     </div>

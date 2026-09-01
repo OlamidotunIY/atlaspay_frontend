@@ -41,13 +41,13 @@
 
 @layer base {
   :root {
-    --background: #FFFFFF;
-    --foreground: #0F172A;
+    --background: #F8FAFC;
+    --foreground: #09090B;
     --card: #FFFFFF;
-    --card-foreground: #0F172A;
+    --card-foreground: #09090B;
     --popover: #FFFFFF;
-    --popover-foreground: #0F172A;
-    --primary: #2563EB;
+    --popover-foreground: #09090B;
+    --primary: #164cfd;
     --primary-foreground: #FFFFFF;
     --secondary: #F1F5F9;
     --secondary-foreground: #0F172A;
@@ -69,7 +69,7 @@
     --card-foreground: #F8FAFC;
     --popover: #020617;
     --popover-foreground: #F8FAFC;
-    --primary: #3B82F6;
+    --primary: #164AFB;
     --primary-foreground: #FFFFFF;
     --secondary: #1E293B;
     --secondary-foreground: #F8FAFC;
