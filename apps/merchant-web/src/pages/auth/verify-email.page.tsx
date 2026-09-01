@@ -11,7 +11,8 @@ import {
   AuthFormHeader,
   InputOTP,
   InputOTPGroup,
-  InputOTPSlot
+  InputOTPSlot,
+  toast
 } from '@org/design-system';
 
 export function VerifyEmailPage() {
@@ -37,14 +38,31 @@ export function VerifyEmailPage() {
     onSubmit: async ({ value }) => {
       if (!identifier) return;
 
-      const targetRoute = await submitEmailVerification({
+      const verificationPromise = submitEmailVerification({
         identifier,
         code: value.code,
         type: 'EMAIL_VERIFICATION'
-      }, MERCHANT_ROUTES.LOGIN); // default fallback route is LOGIN
+      }, MERCHANT_ROUTES.LOGIN); // fallback doesn't matter much here since we delay navigation
 
-      if (targetRoute) {
-        navigate(targetRoute, { replace: true });
+      toast.promise(
+        verificationPromise,
+        {
+          loading: 'Verifying your email...',
+          success: 'Email verified! A setup link has been sent to your email to configure your account.',
+          error: 'Failed to verify email. Please check the code and try again.'
+        }
+      );
+
+      try {
+        const targetRoute = await verificationPromise;
+        if (targetRoute) {
+          // Delay navigation by a few seconds to let user read the success message
+          setTimeout(() => {
+            navigate(targetRoute, { replace: true });
+          }, 3500);
+        }
+      } catch (e) {
+        // Error is handled by the toast
       }
     },
   });
