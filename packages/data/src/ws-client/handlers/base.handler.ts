@@ -1,6 +1,7 @@
 import { WsEventType } from '../event-types.js';
 
-export interface WsEventHandler<TPayload = unknown> {
-  eventType: WsEventType;
-  handle(payload: TPayload): void;
+export abstract class WsEventHandler<TPayload = unknown> {
+  abstract readonly eventType: WsEventType;
+  abstract register(): () => void;
+  abstract handle(payload: TPayload): void;
 }

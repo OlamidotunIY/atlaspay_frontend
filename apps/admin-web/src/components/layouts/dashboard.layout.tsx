@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import { useSessionManager } from '@org/authentication';
-import { DashboardLayoutShell } from '@org/design-system';
+import { DashboardLayoutShell } from '@org/shell';
 
 export function DashboardLayout() {
   useSessionManager(); // Boot session manager tracking

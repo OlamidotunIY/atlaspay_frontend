@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { useInvitation, useAcceptInvitation, useDeclineInvitation, useAuthStore } from '@org/authentication';
 import { MERCHANT_ROUTES } from '@org/shared';
-import { SplashScreen, ErrorState, Button, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@org/design-system';
+import { SplashScreen, ErrorState, Button, Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@org/shell';
 
 export function InvitePage() {
   const { token } = useParams<{ token: string }>();

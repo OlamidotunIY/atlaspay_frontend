@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Button, Field, FieldDescription, FieldGroup, FieldLabel, Input, Separator, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from '@org/design-system';
+import { Button, Field, FieldDescription, FieldGroup, FieldLabel, Input, Separator, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from '@org/shell';
 import { useForm } from '@tanstack/react-form';
 import { CreateOrganizationInput, BUSINESS_TYPES, BUSINESS_SIZE } from '@org/validation';
 import { MERCHANT_ROUTES } from '@org/shared';

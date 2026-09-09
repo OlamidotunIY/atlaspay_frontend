@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '@org/authentication';
-import { SplashScreen } from '@org/design-system';
+import { SplashScreen } from '@org/shell';
 
 export function GuestGuard({ children, fallback }: { children: React.ReactNode; fallback: string }) {
   const isHydrated = useAuthStore(state => state.isHydrated);

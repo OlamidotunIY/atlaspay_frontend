@@ -7,7 +7,7 @@ import
   FieldLabel,
   FieldDescription,
   AuthFormHeader
-} from '@org/design-system';
+} from '@org/shell';
 import { useForm } from '@tanstack/react-form';
 import { LoginSchema } from '@org/validation';
 import { Link, useLocation, useNavigate } from 'react-router-dom';

@@ -13,7 +13,7 @@ import {
   InputOTPGroup,
   InputOTPSlot,
   toast
-} from '@org/design-system';
+} from '@org/shell';
 
 export function VerifyEmailPage() {
   const location = useLocation();

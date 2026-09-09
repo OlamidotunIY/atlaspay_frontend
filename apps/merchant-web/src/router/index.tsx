@@ -21,6 +21,11 @@ import { ProductsOnboardingPage } from '../pages/onboarding/products.page.js';
 import { TeamOnboardingPage } from '../pages/onboarding/team.page.js';
 import { CompleteOnboardingPage } from '../pages/onboarding/complete.page.js';
 
+// Placeholders for new pages that will be built directly in the app later
+const PlaceholderPage = ({ title }: { title: string }) => (
+  <div className="p-8"><h1 className="text-2xl font-bold">{title}</h1><p>Coming soon...</p></div>
+);
+
 export const router = createHashRouter([
   {
     path: '/',
@@ -90,8 +95,44 @@ export const router = createHashRouter([
       {
         path: MERCHANT_ROUTES.DASHBOARD,
         element: <OverviewPage />
+      },
+      {
+        path: MERCHANT_ROUTES.ATLAS_PAY,
+        element: <PlaceholderPage title="AtlasPay Overview" />
+      },
+      {
+        path: MERCHANT_ROUTES.ATLAS_PAY_TRANSACTIONS,
+        element: <PlaceholderPage title="AtlasPay Transactions" />
+      },
+      {
+        path: MERCHANT_ROUTES.ATLAS_PAY_ACCOUNTS,
+        element: <PlaceholderPage title="AtlasPay Accounts" />
+      },
+      {
+        path: MERCHANT_ROUTES.TEAM,
+        element: <PlaceholderPage title="Team" />
+      },
+      {
+        path: MERCHANT_ROUTES.SETTINGS,
+        element: <PlaceholderPage title="Settings" />
+      },
+      {
+        path: MERCHANT_ROUTES.COMMERCE,
+        element: <PlaceholderPage title="Commerce" />
+      },
+      {
+        path: MERCHANT_ROUTES.LOGISTICS,
+        element: <PlaceholderPage title="Logistics" />
       }
     ]
+  },
+  {
+    path: MERCHANT_ROUTES.MARKETPLACE,
+    element: (
+      <AuthGuard fallback={MERCHANT_ROUTES.LOGIN}>
+        <PlaceholderPage title="Marketplace" />
+      </AuthGuard>
+    )
   },
   {
     path: '*',

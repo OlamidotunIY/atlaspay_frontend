@@ -23,6 +23,9 @@
     },
     {
       "path": "./packages/features/organization"
+    },
+    {
+      "path": "./packages/shell"
     }
   ],
   "compilerOptions": {}

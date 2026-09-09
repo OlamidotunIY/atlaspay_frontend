@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Button, Separator } from '@org/design-system';
+import { Button, Separator } from '@org/shell';
 import { PackageOpen, ArrowRight, ArrowLeft } from 'lucide-react';
 import { MERCHANT_ROUTES } from '@org/shared';
 

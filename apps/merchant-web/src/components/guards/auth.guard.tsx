@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore, useAuthAccount, useLogout } from '@org/authentication';
-import { SplashScreen, toast } from '@org/design-system';
+import { SplashScreen, toast } from '@org/shell';
 import { MERCHANT_ROUTES } from '@org/shared';
 
 export function AuthGuard({ children, fallback, requireOnboarding = true }: { children: React.ReactNode; fallback: string; requireOnboarding?: boolean }) {

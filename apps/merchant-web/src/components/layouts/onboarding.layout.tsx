@@ -1,5 +1,5 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import { Avatar, AvatarFallback, AvatarImage, Button, Logo } from '@org/design-system';
+import { Avatar, AvatarFallback, AvatarImage, Button, Logo } from '@org/shell';
 import { LogOut } from 'lucide-react';
 import { useAuthAccount, useLogout, useAuthStore } from '@org/authentication';
 import { MERCHANT_ROUTES } from '@org/shared';

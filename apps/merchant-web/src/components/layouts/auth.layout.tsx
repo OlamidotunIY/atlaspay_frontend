@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { AuthSplitLayout } from '@org/design-system';
+import { AuthSplitLayout } from '@org/shell';
 
 export function AuthLayout()
 {
